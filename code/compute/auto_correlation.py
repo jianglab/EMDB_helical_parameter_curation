@@ -566,8 +566,6 @@ def compute_helical_parameters(map3d, apix, da=1.0, dz=1.0,
     
     npeaks = npeaks_guess
 
-    print('peak to use', npeaks_guess, peak_width, peak_height, minmass)
-
     # 4. Fit the helical lattice using the detected peaks.
     trc1, trc2 = fitHelicalLattice(peaks[:npeaks], acf, da, dz)
     
