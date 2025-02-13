@@ -550,8 +550,10 @@ def compute_helical_parameters(map3d, apix, da=1.0, dz=1.0,
     peak_height = peak_height_base*dz
 
     peaks, masses = find_peaks(acf, da=da, dz=dz, peak_width=peak_width, peak_height=peak_height, minmass=1)
+
     if peaks is None or len(peaks) < 3:
-        raise ValueError("Not enough peaks were detected in the auto-correlation image.")
+        #raise ValueError("Not enough peaks were detected in the auto-correlation image.")
+        return 0,0,1
     
 
      
@@ -561,6 +563,10 @@ def compute_helical_parameters(map3d, apix, da=1.0, dz=1.0,
         rotor = Rotor()
         rotor.fit_rotate(np.vstack((np.arange(len(masses)-3), masses.iloc[3:])).T )
         npeaks_guess = min(npeaks_all, rotor.get_elbow_index()+3)
+
+        if npeaks_guess < 10:
+            npeaks_guess = npeaks_all
+
     except:
         npeaks_guess = npeaks_all
     
