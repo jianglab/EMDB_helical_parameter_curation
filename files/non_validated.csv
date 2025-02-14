@@ -1,4 +1,4 @@
-emdb_id,group,resolution (??),rise_deposited (??),twist_deposited (??),csym_deposited,curated_rise (??),curated_twist (??),curated_csym,vector difference,axes order,cc_emdb,cc_curated,validated,update,reason,reason 1,reason 2
+emdb_id,group,resolution (Å),rise_deposited (Å),twist_deposited (°),csym_deposited,curated_rise (Å),curated_twist (°),curated_csym,vector difference,axes order,cc_emdb,cc_curated,validated,update,reason,reason 1,reason 2
 EMD-45565,non-amyloid,3,27.38,167.88,C1,27.41190769,-166.9310655,1,5.203299324,,0.548508828,0.690189624,Yes,improve,twist sign,,
 EMD-50049,non-amyloid,3,45.45,132.37,C1,3.536092926,26.04394628,1,57.18138183,,0.824579231,0.093966243,No,worse,partial map,,
 EMD-60132,non-amyloid,3.54,27.325,-166.693,C1,27.43,-166.7,1,50.15608627,,0.879067204,0.918895912,Yes,equal,deposited,,

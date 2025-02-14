@@ -132,14 +132,15 @@ def normalized_cross_correlation(volume1, volume2, mask=None):
 
     return normalized_cross_corr
 
-def apply_sym(volume_data, original_pixel, rise_angstrom, twist_degree, rise_val, twist_val, only_original=False):
+def apply_sym(volume_data, original_pixel, rise_angstrom, twist_degree, rise_val, twist_val, only_original=False, n_rise = 2):
 
     mask = mask_around(volume_data, 20)
     D, H, W = volume_data.shape
 
     new_size = (D, H, W)
 
-    fractions = 2*rise_angstrom/(D*original_pixel)
+    fractions = n_rise*rise_angstrom/(D*original_pixel)
+    fractions = min(0.05, fractions)
 
     sym_volume = apply_helical_symmetry(volume_data, original_pixel, twist_degree,
                                         rise_angstrom, new_size=new_size, new_apix=original_pixel,cpu=1,
@@ -150,7 +151,8 @@ def apply_sym(volume_data, original_pixel, rise_angstrom, twist_degree, rise_val
     if only_original == True:
         cc_hi3d=cc
     else:
-        fractions = 2*rise_val/(D*original_pixel)
+        fractions = n_rise*rise_val/(D*original_pixel)
+        fractions = min(0.05, fractions)
         sym_volume = apply_helical_symmetry(volume_data, original_pixel, twist_val,
                                             rise_val, new_size=new_size, new_apix=original_pixel, cpu=1,
                                             fraction=fractions)
