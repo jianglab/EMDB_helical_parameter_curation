@@ -37,6 +37,7 @@ def get_file_size(url):
 def download_file_from_url(url):
     import tempfile
     import requests
+    #print(url)
     try:
         filesize = get_file_size(url)
         local_filename = url.split('/')[-1]
