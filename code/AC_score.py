@@ -6,12 +6,13 @@ from compute.download import get_correct_data_url, get_emdb_parameters, is_amylo
 from compute.symmetrization import apply_sym
 
 
-data_path = './files/need_curation.csv'
+#data_path = './files/need_curation.csv'
+data_path = './EMDB_validation.csv'
 
 data_pd = pd.read_csv(data_path, dtype='str')
 
 emdb_list = list(data_pd[data_pd['reason']=='check']['emdb_id'].str[4:])
-emdb_list = ['18432']
+emdb_list = ['17678']
 # 18432
 
 print(len(emdb_list))
