@@ -132,7 +132,7 @@ def normalized_cross_correlation(volume1, volume2, mask=None):
 
     return normalized_cross_corr
 
-def apply_sym(volume_data, original_pixel, rise_angstrom, twist_degree, rise_val, twist_val, only_original=False, n_rise = 10):
+def sym_cross_correlation(volume_data, original_pixel, rise_angstrom, twist_degree, rise_val, twist_val, only_original=False, n_rise = 3):
 
     mask = mask_around(volume_data, 20)
     D, H, W = volume_data.shape

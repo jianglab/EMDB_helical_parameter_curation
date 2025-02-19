@@ -77,11 +77,35 @@ def get_emdb_map_url(emdid):
     url = f"{server}/emdb/structures/EMD-{emdid_number}/map/emd_{emdid_number}.map.gz"
     return url
 
+def get_half_maps_url(emdid):
+    emdid_number = emdid.lower().split("emd-")[-1]
+    server = "https://files.wwpdb.org/pub"    # Rutgers University, USA
+    #server = "https://ftp.ebi.ac.uk/pub/databases" # European Bioinformatics Institute, England
+    #server = "http://ftp.pdbj.org/pub" # Osaka University, Japan
+    url_1 = f"{server}/emdb/structures/EMD-{emdid_number}/other/emd_{emdid_number}_half_map_1.map.gz"
+    url_2 = f"{server}/emdb/structures/EMD-{emdid_number}/other/emd_{emdid_number}_half_map_2.map.gz"
+    return url_1, url_2
+
+def get_half_maps(emdid):
+    url_1, url_2 = get_half_maps_url(emdid)
+    try:
+        data1, map_crs1, apix1 = get_3d_map_from_url(url_1)
+        data1 = correct_data(map_crs1, data1, emdid)
+
+        data2, map_crs2, apix2 = get_3d_map_from_url(url_2)
+        data2 = correct_data(map_crs2, data2, emdid)
+        return data1, data2, apix1, apix2
+    except:
+        print(f'{emdid} has no half maps')
+        return None
+    
+    return map_1, map_2
+
 def get_3d_map_from_url(url):
     url_final = get_direct_url(url)    # convert cloud drive indirect url to direct url
     with download_file_from_url(url_final) as fileobj:
         if fileobj is None:
-            sys.exit(1)
+            return None
         data = get_3d_map_from_file(fileobj.name)
     file_to_remove = fileobj.name[:-3]
     if os.path.exists(file_to_remove):
@@ -116,9 +140,13 @@ def correct_data(map_crs, data, emdb_id):
 
 def get_correct_data_url(emdid):
     emdb_url = get_emdb_map_url(emdid)
-    data, map_crs, apix = get_3d_map_from_url(emdb_url)
-    data = correct_data(map_crs, data, emdid)
-    return data, apix
+    try:
+        data, map_crs, apix = get_3d_map_from_url(emdb_url)
+        data = correct_data(map_crs, data, emdid)
+        return data, apix
+    except:
+        print(f'{emdid} has no map')
+        return None
 
 def get_emdb_parameters(emd_id):
     try:

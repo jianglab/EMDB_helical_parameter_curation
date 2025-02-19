@@ -3,7 +3,7 @@ import pandas as pd
 import sys, os
 
 from compute.download import get_correct_data_url, get_emdb_parameters, is_amyloid
-from compute.symmetrization import apply_sym
+from compute.symmetrization import sym_cross_correlation
 
 
 #data_path = './files/need_curation.csv'
@@ -30,7 +30,7 @@ for i in range(len(emdb_list)):
 
 
     data, apix = get_correct_data_url(emdid)
-    cc, cc_hi3d = apply_sym(data, apix, float(rise_original), float(twist_original), float(rise), float(twist), only_original=False, n_rise=10)
+    cc, cc_hi3d = sym_cross_correlation(data, apix, float(rise_original), float(twist_original), float(rise), float(twist), only_original=False, n_rise=10)
     print(emdid, cc, cc_hi3d)
 
     data_pd.loc[data_pd['emdb_id'] == 'EMD-' + str(emdid),['cc_emdb','cc_curated']] = (cc, cc_hi3d)
