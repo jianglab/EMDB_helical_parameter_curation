@@ -53,8 +53,12 @@ def fsc_calculation(map1, map2, rise, twist, apix, n_rise=3, mask_path = None):
     with open(log_file, "r") as f:
         output_lines = f.read().strip().split('\n')
 
-    value_line = output_lines[-3].split(' ')
+    # mask FSC
+    #value_line = output_lines[-3].split(' ')
 
+    # unmasked FSC
+    value_line = output_lines[7].split(' ')
+    
     resolution = value_line[3]
 
     print(value_line)
@@ -71,7 +75,7 @@ suboptimal_data = data_pd[(data_pd['reason'] == 'suboptimal') | (data_pd['reason
 emdb_list = suboptimal_data['emdb_id'].str[4:]
 emdb_list = list(emdb_list)
 #emdb_list = emdb_list[1:2]
-emdb_list = ['18249']
+#emdb_list = ['33934']
 
 for i in range(len(emdb_list)):
 
@@ -94,10 +98,7 @@ for i in range(len(emdb_list)):
     except:
         continue
 
-    
-
     apix = (float(apix1)+float(apix2))/2
-    
 
     FSC_original_sym = fsc_calculation(map1, map2, float(rise_original), float(twist_original), apix)
     FSC_hi3d_sym = fsc_calculation(map1, map2, float(rise), float(twist), apix)
