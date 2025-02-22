@@ -6,9 +6,10 @@ import os
 import mrcfile
 from compute.download import get_half_maps
 from compute.symmetrization import apply_helical_symmetry
+from compute.FSC import calculate_fsc, plot_fsc
 
 
-def fsc_calculation(map1, map2, rise, twist, apix, n_rise=3, mask_path = None):
+def fsc_calculation(map1, map2, rise, twist, apix, n_rise=3, mask_path = None, trueFSC=True):
 
     save_path = '/tmp/fsc'
     if os.path.exists(save_path) is False:
@@ -41,28 +42,19 @@ def fsc_calculation(map1, map2, rise, twist, apix, n_rise=3, mask_path = None):
         mrc.set_data(sym_map2.astype(np.float32))
         mrc.voxel_size = apix
 
-    # Construct your command with output redirection
-    command = f'trueFSC.py {sym_map1_path} {sym_map2_path} {save_path}/fsc.pdf'
-    #if mask_path is not None:
-
-    os.system(command)
-
-    log_file = save_path+'/fsc.log'
-    #os.system(f'trueFSC.py -h')
-
-    with open(log_file, "r") as f:
-        output_lines = f.read().strip().split('\n')
-
-    # mask FSC
-    #value_line = output_lines[-3].split(' ')
-
-    # unmasked FSC
-    value_line = output_lines[7].split(' ')
+    if trueFSC is True:
+        command = f'trueFSC.py {sym_map1_path} {sym_map2_path} {save_path}/fsc.pdf'
+        os.system(command)
+        log_file = save_path+'/fsc.log'
+        with open(log_file, "r") as f:
+            output_lines = f.read().strip().split('\n')
+        value_line = output_lines[7].split(' ')
+        resolution = value_line[3]
+    else:
+        fiugre_path = save_path+'/fsc_plot.png'
+        spatial_freq, fsc = calculate_fsc(sym_map1, sym_map2, pixel_size=apix)
+        resolution = plot_fsc(spatial_freq, fsc, fiugre_path)
     
-    resolution = value_line[3]
-
-    print(value_line)
-
     return resolution
 
 data_path = './EMDB_validation.csv'
@@ -75,7 +67,7 @@ suboptimal_data = data_pd[(data_pd['reason'] == 'suboptimal') | (data_pd['reason
 emdb_list = suboptimal_data['emdb_id'].str[4:]
 emdb_list = list(emdb_list)
 #emdb_list = emdb_list[1:2]
-#emdb_list = ['33934']
+emdb_list = ['33934']
 
 for i in range(len(emdb_list)):
 
@@ -87,11 +79,11 @@ for i in range(len(emdb_list)):
 
     print(rise_original, twist_original, rise, twist)
 
-    if os.path.exists(output_pd_path):
-        suboptimal_pd = pd.read_csv(output_pd_path, dtype='str')
-        if emdid_full in list(suboptimal_pd['emdb_id']):
-            print(f'{emdid_full} has been checked')
-            continue
+    #if os.path.exists(output_pd_path):
+    #    suboptimal_pd = pd.read_csv(output_pd_path, dtype='str')
+    #    if emdid_full in list(suboptimal_pd['emdb_id']):
+    #        print(f'{emdid_full} has been checked')
+    #        continue
 
     try:
         map1, map2, apix1, apix2 = get_half_maps(emdid)
@@ -100,8 +92,10 @@ for i in range(len(emdb_list)):
 
     apix = (float(apix1)+float(apix2))/2
 
-    FSC_original_sym = fsc_calculation(map1, map2, float(rise_original), float(twist_original), apix)
-    FSC_hi3d_sym = fsc_calculation(map1, map2, float(rise), float(twist), apix)
+    FSC_original_sym = fsc_calculation(map1, map2, float(rise_original), float(twist_original), apix, trueFSC=False)
+    print('Finish original')
+    FSC_hi3d_sym = fsc_calculation(map1, map2, float(rise), float(twist), apix, trueFSC=False)
+    print('Finish curated')
 
     new_row = pd.DataFrame([{
         'emdb_id': emdid_full,
@@ -109,8 +103,8 @@ for i in range(len(emdb_list)):
         'FSC_curated': FSC_hi3d_sym
     }])
 
-    suboptimal_pd = pd.concat([suboptimal_pd, new_row], ignore_index=True)
-    suboptimal_pd.to_csv(output_pd_path,index=False)
+    #suboptimal_pd = pd.concat([suboptimal_pd, new_row], ignore_index=True)
+    #suboptimal_pd.to_csv(output_pd_path,index=False)
 
     print(emdid, FSC_original_sym, FSC_hi3d_sym)
 
