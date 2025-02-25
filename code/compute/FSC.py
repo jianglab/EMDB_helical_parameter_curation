@@ -85,5 +85,10 @@ def plot_fsc(spatial_freq, fsc, path,title="FSC Curve"):
     plt.grid(True)
     plt.ylim(-0.1, 1.1)
     plt.savefig(path)
+
+    resolution = 0
+    gold_standard = np.argwhere(fsc < 0.143).min()
+    resolution = (spatial_freq[gold_standard] + spatial_freq[gold_standard-1]) / 2
+    resolution = round(1/resolution, 2)
     
-    return 0
+    return resolution

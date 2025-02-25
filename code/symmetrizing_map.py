@@ -3,7 +3,7 @@ import pandas as pd
 import os
 import mrcfile
 from compute.download import get_correct_data_url
-from compute.symmetrization import apply_helical_symmetry
+from compute.symmetrization import apply_helical_symmetry, apply_helical_symmetry_cg, apply_helical_symmetry_cg_gpu, apply_helical_symmetry_ds
 
 data_path = './EMDB_validation.csv'
 
@@ -35,7 +35,7 @@ for i in range(len(emdb_list)):
 
     fractions = 3*rise/(D*apix)
     fractions = min(0.1, fractions)
-    fractions = 0.5
+    #fractions = 0.5
 
     sym_map1 = apply_helical_symmetry(map, apix, twist_original,
                                         rise_original, new_size=new_size, new_apix=apix,cpu=1,
@@ -44,6 +44,9 @@ for i in range(len(emdb_list)):
     sym_map2 = apply_helical_symmetry(map, apix, twist,
                                         rise, new_size=new_size, new_apix=apix,cpu=1,
                                         fraction=fractions)
+
+    #sym_map1 = apply_helical_symmetry_cg_gpu(map, apix, rise_original, twist_original, 1)
+    #sym_map2 = apply_helical_symmetry_cg_gpu(map, apix, rise, twist, 1)
     
     sym_map1_path = save_path+f'/map_{emdid}_original.mrc'
     sym_map2_path = save_path+f'/map_{emdid}_curated.mrc'

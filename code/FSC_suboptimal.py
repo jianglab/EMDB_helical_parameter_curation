@@ -9,6 +9,57 @@ from compute.symmetrization import apply_helical_symmetry
 from compute.FSC import calculate_fsc, plot_fsc
 
 
+def cylinder_mask(volume, soft_scale = 0.3, radius_ratio = None):
+    shape = volume.shape
+    z,y,x = np.ogrid[:shape[0], :shape[1], :shape[2]]
+    center = tuple(map(lambda x: int(x // 2), shape))
+
+    distance = np.sqrt((x - center[2])**2 + (y - center[1])**2)
+
+    if radius_ratio is None:
+        radius = int(len(volume)//2)
+    else:
+        radius = int(len(volume)//2*radius_ratio)
+    outer_radius = radius
+    inner_radius = int(radius * (1-soft_scale))
+
+    mask = np.zeros((1, shape[1],shape[2]))
+
+    # Inside the inner radius
+    mask[distance < inner_radius] = 1
+
+    # Between inner and outer radius
+    transition_zone = (distance >= inner_radius) & (distance <= outer_radius)
+    mask[transition_zone] = 1 - (distance[transition_zone] - inner_radius) / (outer_radius - inner_radius)
+
+
+    mask = np.repeat(mask, len(volume),axis=0)
+    return mask
+
+def apply_cos_circular_mask(volume, ratio = 1):
+    d, h, w = volume.shape
+    Z, Y, X = np.ogrid[-d // 2:d // 2, -h // 2:h // 2, -w // 2:w // 2]
+    outer_radius = min(d, h, w) // 2
+    outer_radius = int(outer_radius*ratio)
+    inner_radius = int(outer_radius*0.9)
+    distance = np.sqrt(X ** 2 + Y ** 2 + Z ** 2)
+
+    mask = np.ones((d, h, w), dtype=np.float32)
+    mask[distance > outer_radius] = 0
+    background = volume[mask == 0].mean()
+
+    mask[distance <= inner_radius] = 1
+
+    # Apply cosine transition between inner_mask and outer_mask
+    transition_region = (distance > inner_radius) & (distance < outer_radius)
+    mask[transition_region] = 0.5 * (
+                1 + np.cos(np.pi * (distance[transition_region] - inner_radius) / (outer_radius - inner_radius)))
+
+    #volume = volume-background
+    volume = volume*mask
+    return volume
+
+
 def fsc_calculation(map1, map2, rise, twist, apix, n_rise=3, mask_path = None, trueFSC=True):
 
     save_path = '/tmp/fsc'
@@ -20,16 +71,32 @@ def fsc_calculation(map1, map2, rise, twist, apix, n_rise=3, mask_path = None, t
 
     fractions = n_rise*rise/(D*apix)
     fractions = min(0.1, fractions)
-    fractions = 0.2
+    fractions = 1
 
+    map1_copy = map1.copy()
+    map2_copy = map2.copy()
+
+    c_mask = cylinder_mask(map1_copy, radius_ratio=0.7)
+    #map1_copy = map1_copy*c_mask
+    #map2_copy = map2_copy*c_mask
+
+    #map1_copy = apply_cos_circular_mask(map1_copy, ratio=0.7)
+    #map2_copy = apply_cos_circular_mask(map2_copy, ratio=0.7)
     
 
-    sym_map1 = apply_helical_symmetry(map1, apix, twist,
+    sym_map1 = apply_helical_symmetry(map1_copy, apix, twist,
                                         rise, new_size=new_size, new_apix=apix,cpu=1,
                                         fraction=fractions)
-    sym_map2 = apply_helical_symmetry(map2, apix, twist,
+    sym_map2 = apply_helical_symmetry(map2_copy, apix, twist,
                                         rise, new_size=new_size, new_apix=apix,cpu=1,
                                         fraction=fractions)
+    
+
+    sym_map1 = apply_cos_circular_mask(sym_map1, ratio=0.9)
+    sym_map2 = apply_cos_circular_mask(sym_map2, ratio=0.9)
+
+    #sym_map1 = sym_map1*c_mask
+    #sym_map2 = sym_map2*c_mask
     
     sym_map1_path = save_path+'/map1.mrc'
     sym_map2_path = save_path+'/map2.mrc'
@@ -52,7 +119,7 @@ def fsc_calculation(map1, map2, rise, twist, apix, n_rise=3, mask_path = None, t
         resolution = value_line[3]
     else:
         fiugre_path = save_path+'/fsc_plot.png'
-        spatial_freq, fsc = calculate_fsc(sym_map1, sym_map2, pixel_size=apix)
+        spatial_freq, fsc = calculate_fsc(sym_map1, sym_map2, pixel_size=apix,shells=len(sym_map1)//2)
         resolution = plot_fsc(spatial_freq, fsc, fiugre_path)
     
     return resolution
@@ -67,7 +134,7 @@ suboptimal_data = data_pd[(data_pd['reason'] == 'suboptimal') | (data_pd['reason
 emdb_list = suboptimal_data['emdb_id'].str[4:]
 emdb_list = list(emdb_list)
 #emdb_list = emdb_list[1:2]
-emdb_list = ['33934']
+emdb_list = ['34879']
 
 for i in range(len(emdb_list)):
 
