@@ -13,7 +13,7 @@ import sys, os
 from compute.download import get_correct_data_url, get_emdb_parameters, is_amyloid
 from compute.calculate_radius import rmin_max_estimateion, vector_diff
 from compute.auto_correlation import cylindrical_projection, compute_helical_parameters
-from compute.symmetrization import apply_sym
+from compute.symmetrization import sym_cross_correlation
 
 
 data_path = './files/need_curation.csv'
@@ -59,7 +59,10 @@ for i in range(len(emdb_list)):
             print(f'{emdid_full} has been checked')
             continue
     
-    data, apix = get_correct_data_url(emdid)
+    downloaded_data = get_correct_data_url(emdid)
+    if downloaded_data is None:
+        continue
+    data, apix = downloaded_data
     meta_data = get_emdb_parameters(emdid)
     amyloid_id = is_amyloid(meta_data)
 
@@ -94,18 +97,19 @@ for i in range(len(emdb_list)):
         twist_val = 1
 
     if difference < resolution:
-        cc, cc_hi3d = apply_sym(data, apix, rise_original, twist_original, rise_val, twist_val, only_original=False)
+        cc, cc_hi3d = sym_cross_correlation(data, apix, rise_original, twist_original, rise_val, twist_val, only_original=False)
         validated = 'Yes'
         update = 'equal'
     elif difference >= resolution:
-        cc, cc_hi3d = apply_sym(data, apix, rise_original, twist_original, rise_val, twist_val, only_original=False)
+        cc, cc_hi3d = sym_cross_correlation(data, apix, rise_original, twist_original, rise_val, twist_val, only_original=False)
         validated = 'No'
-        if cc_hi3d/cc > 1.1:
-            update = 'improve'
-        elif cc_hi3d/cc <0.9:
-            update = 'worse'
-        else:
-            update = 'equal'
+    if cc_hi3d/cc > 1.1:
+        update = 'improve'
+    elif cc_hi3d/cc <0.9:
+        update = 'worse'
+        validated = 'No'
+    else:
+        update = 'equal'
 
     print(emdid, group, resolution, difference, cc, cc_hi3d)
 

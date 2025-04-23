@@ -9,7 +9,7 @@ data_path = './EMDB_validation.csv'
 
 data_pd = pd.read_csv(data_path, dtype='str')
 emdb_list = ['32033', '0614','41844']
-emdb_list = ['33934']
+emdb_list = ['38108']
 
 save_path = '/tmp/sym_map'
 
@@ -33,7 +33,7 @@ for i in range(len(emdb_list)):
     D, H, W = map.shape
     new_size = (D, H, W)
 
-    fractions = 3*rise/(D*apix)
+    fractions = 2*rise/(D*apix)
     fractions = min(0.1, fractions)
     #fractions = 0.5
 
