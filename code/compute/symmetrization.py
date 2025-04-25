@@ -7,8 +7,7 @@ import numpy as np
 import platform
 from numba import jit, set_num_threads, prange
 
-import torch
-import torch.nn.functional as F
+
 
 def lp_filter(image, factor):
     # Perform the Fourier Transform
@@ -241,6 +240,9 @@ def apply_helical_symmetry_cg(volume, pixel_size, rise, twist, cyclic_symmetry):
 
 
 def apply_helical_symmetry_cg_gpu(volume, pixel_size, rise, twist, cyclic_symmetry, device='cuda'):
+
+    import torch
+    
     """
     Symmetrizes a 3D density map according to helical parameters and cyclic symmetry, using GPU acceleration with PyTorch.
     
@@ -318,6 +320,9 @@ def affine_transform_torch(volume, rotation_matrix, offset, device):
     Returns:
       torch.Tensor: The transformed volume.
     """
+
+    import torch
+
     # Get the grid of coordinates for the volume
     grid = torch.meshgrid(torch.arange(volume.shape[0], device=device),
                           torch.arange(volume.shape[1], device=device),

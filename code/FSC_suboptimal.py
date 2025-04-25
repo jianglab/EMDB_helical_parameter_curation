@@ -60,9 +60,11 @@ def apply_cos_circular_mask(volume, ratio = 1):
     return volume
 
 
-def fsc_calculation(map1, map2, rise, twist, apix, n_rise=3, mask_path = None, trueFSC=True):
+def fsc_calculation(map1, map2, rise, twist, apix, n_rise=3, mask_path = None, trueFSC=True, name='ori',emdid='0000'):
 
-    save_path = '/tmp/fsc'
+    #dic_path = '/tmp/fsc'
+    dic_path = '/net/jiang/scratch/li3221/curation/suboptimal'
+    save_path = dic_path + f'/{emdid}'
     if os.path.exists(save_path) is False:
         os.mkdir(save_path)
 
@@ -95,11 +97,14 @@ def fsc_calculation(map1, map2, rise, twist, apix, n_rise=3, mask_path = None, t
     sym_map1 = apply_cos_circular_mask(sym_map1, ratio=0.9)
     sym_map2 = apply_cos_circular_mask(sym_map2, ratio=0.9)
 
+    average_map  = (sym_map1+sym_map2)/2
+
     #sym_map1 = sym_map1*c_mask
     #sym_map2 = sym_map2*c_mask
     
-    sym_map1_path = save_path+'/map1.mrc'
-    sym_map2_path = save_path+'/map2.mrc'
+    sym_map1_path = save_path+f'/map1_{name}.mrc'
+    sym_map2_path = save_path+f'/map2_{name}.mrc'
+    average_path = save_path+f'/average_{name}.mrc'
     
     with mrcfile.new(sym_map1_path, overwrite=True) as mrc:
         mrc.set_data(sym_map1.astype(np.float32))
@@ -108,17 +113,21 @@ def fsc_calculation(map1, map2, rise, twist, apix, n_rise=3, mask_path = None, t
     with mrcfile.new(sym_map2_path, overwrite=True) as mrc:
         mrc.set_data(sym_map2.astype(np.float32))
         mrc.voxel_size = apix
+    
+    with mrcfile.new(average_path, overwrite=True) as mrc:
+        mrc.set_data(average_map.astype(np.float32))
+        mrc.voxel_size = apix
 
     if trueFSC is True:
-        command = f'trueFSC.py {sym_map1_path} {sym_map2_path} {save_path}/fsc.pdf'
+        command = f'trueFSC.py {sym_map1_path} {sym_map2_path} {save_path}/fsc_plot_{name}.pdf'
         os.system(command)
-        log_file = save_path+'/fsc.log'
+        log_file = save_path+f'/fsc_plot_{name}.log'
         with open(log_file, "r") as f:
             output_lines = f.read().strip().split('\n')
         value_line = output_lines[7].split(' ')
         resolution = value_line[3]
     else:
-        fiugre_path = save_path+'/fsc_plot.png'
+        fiugre_path = save_path+f'/fsc_plot_{name}.png'
         spatial_freq, fsc = calculate_fsc(sym_map1, sym_map2, pixel_size=apix,shells=len(sym_map1)//2)
         resolution = plot_fsc(spatial_freq, fsc, fiugre_path)
     
@@ -126,7 +135,7 @@ def fsc_calculation(map1, map2, rise, twist, apix, n_rise=3, mask_path = None, t
 
 data_path = './EMDB_validation.csv'
 output_pd_path = './files/suboptimal.csv'
-
+use_trueFSC = True
 data_pd = pd.read_csv(data_path, index_col=False)
 suboptimal_pd = pd.DataFrame({'emdb_id':[], 'FSC_original':[], 'FSC_curated':[]})
 
@@ -134,7 +143,7 @@ suboptimal_data = data_pd[(data_pd['reason'] == 'suboptimal') | (data_pd['reason
 emdb_list = suboptimal_data['emdb_id'].str[4:]
 emdb_list = list(emdb_list)
 #emdb_list = emdb_list[1:2]
-emdb_list = ['34879']
+#emdb_list = ['38108']
 
 for i in range(len(emdb_list)):
 
@@ -159,9 +168,9 @@ for i in range(len(emdb_list)):
 
     apix = (float(apix1)+float(apix2))/2
 
-    FSC_original_sym = fsc_calculation(map1, map2, float(rise_original), float(twist_original), apix, trueFSC=False)
+    FSC_original_sym = fsc_calculation(map1, map2, float(rise_original), float(twist_original), apix, trueFSC=use_trueFSC, name='ori', emdid=emdid)
     print('Finish original')
-    FSC_hi3d_sym = fsc_calculation(map1, map2, float(rise), float(twist), apix, trueFSC=False)
+    FSC_hi3d_sym = fsc_calculation(map1, map2, float(rise), float(twist), apix, trueFSC=use_trueFSC, name='hi3d', emdid=emdid)
     print('Finish curated')
 
     new_row = pd.DataFrame([{
@@ -170,8 +179,8 @@ for i in range(len(emdb_list)):
         'FSC_curated': FSC_hi3d_sym
     }])
 
-    #suboptimal_pd = pd.concat([suboptimal_pd, new_row], ignore_index=True)
-    #suboptimal_pd.to_csv(output_pd_path,index=False)
+    suboptimal_pd = pd.concat([suboptimal_pd, new_row], ignore_index=True)
+    suboptimal_pd.to_csv(output_pd_path,index=False)
 
     print(emdid, FSC_original_sym, FSC_hi3d_sym)
 
