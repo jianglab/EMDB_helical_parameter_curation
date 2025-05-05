@@ -15,18 +15,18 @@ print(helical_pd.columns)
 
 helical_pd = helical_pd.rename(columns={'resolution':'resolution (Å)','rise':'rise_deposited (Å)', 'twist':'twist_deposited (°)', 'csym': 'csym_deposited'})
 
-helical_pd = helical_pd.reindex(columns=['emdb_id','group','resolution (Å)','rise_deposited (Å)','twist_deposited (°)','csym_deposited','rise_curated (Å)','twist_curated (°)','csym_curated', 'vector difference','axes order','cc_emdb','cc_curated','validated','update','reason','reason 1','reason 2'])
+helical_pd = helical_pd.reindex(columns=['emdb_id','group','resolution (Å)','rise_deposited (Å)','twist_deposited (°)','csym_deposited','rise_validated (Å)','twist_validated (°)','csym_validated', 'vector difference','axes order','cc_emdb','cc_validated','validated','update','reason','reason 1','reason 2'])
 
-# rise_curated (Å),twist_curated (°),csym_curated,axes order,cc_emdb,cc_curated,validated,update,reason
+# rise_validated (Å),twist_validated (°),csym_validated,axes order,cc_emdb,cc_validated,validated,update,reason
 
 ## add hi3d link
 #link = 'https://helical-indexing-hi3d.streamlit.app/?emd_id=emd'
 #helical_pd['HI3D_link'] = link+helical_pd['emdb_id'].str[3:]
 
 data_path = './EMDB_validation.csv'
-curated_pd = pd.read_csv(data_path)
-non_curated_pd = helical_pd[~helical_pd['emdb_id'].isin(curated_pd['emdb_id'])]
+validated_pd = pd.read_csv(data_path)
+non_validated_pd = helical_pd[~helical_pd['emdb_id'].isin(validated_pd['emdb_id'])]
 
 # save the csv file
 save_path = './files/need_curation.csv'
-non_curated_pd.to_csv(save_path, index=False)
+non_validated_pd.to_csv(save_path, index=False)

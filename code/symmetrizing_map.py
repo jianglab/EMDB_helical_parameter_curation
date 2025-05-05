@@ -22,7 +22,7 @@ for i in range(len(emdb_list)):
     emdid = emdb_list[i]
     emdid_full = 'EMD-'+emdid
 
-    value_list = ['rise_deposited (Å)', 'twist_deposited (°)','rise_curated (Å)', 'twist_curated (°)']
+    value_list = ['rise_deposited (Å)', 'twist_deposited (°)','rise_validated (Å)', 'twist_validated (°)']
     rise_original, twist_original, rise, twist = list(data_pd.loc[data_pd['emdb_id']==emdid_full, value_list].iloc[0].astype(np.float32))
 
     print(emdid_full, rise_original, twist_original, rise, twist)
@@ -38,7 +38,7 @@ for i in range(len(emdb_list)):
     fractions = 1
 
     sym_map1_path = save_path+f'/map_{emdid}_original.mrc'
-    sym_map2_path = save_path+f'/map_{emdid}_curated.mrc'
+    sym_map2_path = save_path+f'/map_{emdid}_validated.mrc'
 
     sym_map1 = apply_helical_symmetry(map, apix, twist_original,
                                         rise_original, new_size=new_size, new_apix=apix,cpu=1,

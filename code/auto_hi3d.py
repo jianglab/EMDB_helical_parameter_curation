@@ -42,9 +42,9 @@ for i in range(len(emdb_list)):
 
     # check this emdb path has been checked or not
 
-    list_header = ['group','rise_curated (Å)','twist_curated (°)',
-                   'csym_curated', 'vector difference','axes order',
-                   'cc_emdb','cc_curated','validated','update']
+    list_header = ['group','rise_validated (Å)','twist_validated (°)',
+                   'csym_validated', 'vector difference','axes order',
+                   'cc_emdb','cc_validated','validated','update']
 
     emdid_full = 'EMD-'+str(emdid)
     if os.path.exists(validated_path):

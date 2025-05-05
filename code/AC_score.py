@@ -23,7 +23,7 @@ for i in range(len(emdb_list)):
 
     emdid_full = 'EMD-'+str(emdid)
 
-    value_list = ['rise_deposited (Å)', 'twist_deposited (°)','rise_curated (Å)', 'twist_curated (°)']
+    value_list = ['rise_deposited (Å)', 'twist_deposited (°)','rise_validated (Å)', 'twist_validated (°)']
 
     rise_original, twist_original, rise, twist = list(data_pd.loc[data_pd['emdb_id']==emdid_full, value_list].iloc[0])
     print(rise_original, twist_original, rise, twist)
@@ -33,6 +33,6 @@ for i in range(len(emdb_list)):
     cc, cc_hi3d = sym_cross_correlation(data, apix, float(rise_original), float(twist_original), float(rise), float(twist), only_original=False, n_rise=10)
     print(emdid, cc, cc_hi3d)
 
-    data_pd.loc[data_pd['emdb_id'] == 'EMD-' + str(emdid),['cc_emdb','cc_curated']] = (cc, cc_hi3d)
+    data_pd.loc[data_pd['emdb_id'] == 'EMD-' + str(emdid),['cc_emdb','cc_validated']] = (cc, cc_hi3d)
 
 data_pd.to_csv(data_path, index=False)

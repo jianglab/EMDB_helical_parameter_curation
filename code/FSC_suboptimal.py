@@ -137,7 +137,7 @@ data_path = './EMDB_validation.csv'
 output_pd_path = './files/suboptimal_2.csv'
 use_trueFSC = True
 data_pd = pd.read_csv(data_path, index_col=False)
-suboptimal_pd = pd.DataFrame({'emdb_id':[], 'FSC_original':[], 'FSC_curated':[]})
+suboptimal_pd = pd.DataFrame({'emdb_id':[], 'FSC_original':[], 'FSC_validated':[]})
 
 suboptimal_data = data_pd[(data_pd['reason'] == 'suboptimal') | (data_pd['reason 1'] == 'suboptimal')]
 emdb_list = suboptimal_data['emdb_id'].str[4:]
@@ -150,7 +150,7 @@ for i in range(len(emdb_list)):
     emdid = emdb_list[i]
     emdid_full = 'EMD-'+emdid
 
-    value_list = ['rise_deposited (Å)', 'twist_deposited (°)','rise_curated (Å)', 'twist_curated (°)']
+    value_list = ['rise_deposited (Å)', 'twist_deposited (°)','rise_validated (Å)', 'twist_validated (°)']
     rise_original, twist_original, rise, twist = list(suboptimal_data.loc[suboptimal_data['emdb_id']==emdid_full, value_list].iloc[0])
 
     print(rise_original, twist_original, rise, twist)
@@ -171,12 +171,12 @@ for i in range(len(emdb_list)):
     FSC_original_sym = fsc_calculation(map1, map2, float(rise_original), float(twist_original), apix, trueFSC=use_trueFSC, name='ori', emdid=emdid)
     print('Finish original')
     FSC_hi3d_sym = fsc_calculation(map1, map2, float(rise), float(twist), apix, trueFSC=use_trueFSC, name='hi3d', emdid=emdid)
-    print('Finish curated')
+    print('Finish validated')
 
     new_row = pd.DataFrame([{
         'emdb_id': emdid_full,
         'FSC_original': FSC_original_sym,
-        'FSC_curated': FSC_hi3d_sym
+        'FSC_validated': FSC_hi3d_sym
     }])
 
     suboptimal_pd = pd.concat([suboptimal_pd, new_row], ignore_index=True)

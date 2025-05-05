@@ -1,4 +1,4 @@
-emdb_id,FSC_original,FSC_curated,group
+emdb_id,FSC_original,FSC_validated,group
 EMD-18249,2.91,2.77,amyloid
 EMD-9232,2.58,2.56,amyloid
 EMD-33719,2.3,2.23,amyloid

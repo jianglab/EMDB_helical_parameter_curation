@@ -1,6 +1,6 @@
 # Validation of the helical parameter of the helical assembly entries in the EMDB
 
-This repository contains the curated value of the helical parameter in the EMDB and the code of automatic curation. 
+This repository contains the validated value of the helical parameter in the EMDB and the code of automatic curation. 
 
 ## Column Name
 
@@ -15,11 +15,11 @@ This repository contains the curated value of the helical parameter in the EMDB 
 
 **csym_deposited**: The original deposited axis symmetry
 
-**curated_rise (Å)**: The curated rise value
+**rise_curated (Å)**: The curated rise value
 
-**curated_twist (°)**: The curated twist value
+**twist_curated (°)**: The curated twist value
 
-**curated_csym**: The curated cyclic symmetry
+**csym_curated**: The curated cyclic symmetry
 
 **vector difference**: The vector difference between the original helical parameter and deposited helical parameter based on the estimated radius
 
@@ -59,6 +59,6 @@ python ./code/auto_hi3d.py
 
 This will create two csv files /file/validated.csv and /file/non_validated.csv, the validated.csv include all the entries that is consistent with the original helical parameters, non_validated.csv include the entries that is not consistent with the original helical parameters that need to be validated. 
 
-### Manual curation using the HI3D web app
+### Manual validation using the HI3D web app
 
 Please manually check through the EMDB entries in the /file/non_validated.csv using [HI3D](https://jiang.bio.purdue.edu/hi3d/)
