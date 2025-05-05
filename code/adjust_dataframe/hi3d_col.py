@@ -14,5 +14,9 @@ df['HI3D_link'] = 'https://helical-indexing-hi3d.streamlit.app/?emd_id=emd-' + d
     + '&rise=' + df['rise_deposited (Å)'].astype(str) + '&twist=' + df['twist_deposited (°)'].astype(str) + '&csym=' + df['csym_deposited'].str[1:]\
         + '&rise2=' + df['rise_validated (Å)'].astype(str) + '&twist2=' + df['twist_validated (°)'].astype(str) + '&csym2=' + df['csym_validated'].str[1:]
 
-#df.to_csv(output_pd_path_1,index=False)
-df.to_excel(output_pd_path_1, index=False)  
+
+df['HI3D_link'] = df['HI3D_link'].apply(lambda x: f'=HYPERLINK("{x}", "Link")' if pd.notnull(x) else '')
+
+# Write to Excel with openpyxl engine
+with pd.ExcelWriter(output_pd_path_1, engine='openpyxl') as writer:
+    df.to_excel(writer, index=False)
