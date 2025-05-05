@@ -1,4 +1,4 @@
-emdb_id,group,resolution (Å),rise_deposited (Å),twist_deposited (°),csym_deposited,rise_validated (Å),twist_validated (°),csym_validated,vector difference,axes order,cc_emdb,cc_validated,validated,update,reason,reason 1,reason 2,HI3D_link
+emdb_id,group,resolution (Å),rise_deposited (Å),twist_deposited (°),csym_deposited,rise_validated (Å),twist_validated (°),csym_validated,vector difference,axes order,cc_emdb,cc_validated,validated,cc_improvement,reason,reason 1,reason 2,HI3D_link
 EMD-18271,amyloid,1.75,4.75,-1.31,C2,4.75,-1.31,C2,0.0,,0.95695,0.95695,Yes,equal,deposited,,,https://helical-indexing-hi3d.streamlit.app/?emd_id=emd-18271&rise=4.75&twist=-1.31&csym=2&rise2=4.75&twist2=-1.31&csym2=2
 EMD-14057,amyloid,1.86,2.368,179.597,C1,2.367,-179.6,C1,0.2878643636223589,,0.13652,0.96621,Yes,improve,twist sign,,,https://helical-indexing-hi3d.streamlit.app/?emd_id=emd-14057&rise=2.368&twist=179.597&csym=1&rise2=2.367&twist2=-179.6&csym2=1
 EMD-13223,amyloid,1.9,4.78,-0.36,C1,4.78,-0.36,C1,0.0,,0.96122,0.96122,Yes,equal,deposited,,,https://helical-indexing-hi3d.streamlit.app/?emd_id=emd-13223&rise=4.78&twist=-0.36&csym=1&rise2=4.78&twist2=-0.36&csym2=1

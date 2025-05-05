@@ -31,7 +31,7 @@ This repository contains the validated value of the helical parameter in the EMD
 
 **validated**: Whether this map can be validated or not, some cases using focus reconstruction or only one asym unit is deposited can not be validated
 
-**update**: Whether there is significant difference of the cc value using the original helical parameter of curated helical parameter
+**cc_improvement**: Whether there is significant difference of the cc value using the original helical parameter of curated helical parameter
 
 **reason**: The potential error of the map.
 
