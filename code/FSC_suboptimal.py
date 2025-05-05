@@ -63,7 +63,7 @@ def apply_cos_circular_mask(volume, ratio = 1):
 def fsc_calculation(map1, map2, rise, twist, apix, n_rise=3, mask_path = None, trueFSC=True, name='ori',emdid='0000'):
 
     #dic_path = '/tmp/fsc'
-    dic_path = '/net/jiang/scratch/li3221/curation/suboptimal'
+    dic_path = '/net/jiang/scratch/li3221/curation/suboptimal_2'
     save_path = dic_path + f'/{emdid}'
     if os.path.exists(save_path) is False:
         os.mkdir(save_path)
@@ -134,7 +134,7 @@ def fsc_calculation(map1, map2, rise, twist, apix, n_rise=3, mask_path = None, t
     return resolution
 
 data_path = './EMDB_validation.csv'
-output_pd_path = './files/suboptimal.csv'
+output_pd_path = './files/suboptimal_2.csv'
 use_trueFSC = True
 data_pd = pd.read_csv(data_path, index_col=False)
 suboptimal_pd = pd.DataFrame({'emdb_id':[], 'FSC_original':[], 'FSC_curated':[]})
@@ -143,23 +143,23 @@ suboptimal_data = data_pd[(data_pd['reason'] == 'suboptimal') | (data_pd['reason
 emdb_list = suboptimal_data['emdb_id'].str[4:]
 emdb_list = list(emdb_list)
 #emdb_list = emdb_list[1:2]
-#emdb_list = ['38108']
+#emdb_list = ['31953']
 
 for i in range(len(emdb_list)):
 
     emdid = emdb_list[i]
     emdid_full = 'EMD-'+emdid
 
-    value_list = ['rise_deposited (Å)', 'twist_deposited (°)','curated_rise (Å)', 'curated_twist (°)']
+    value_list = ['rise_deposited (Å)', 'twist_deposited (°)','rise_curated (Å)', 'twist_curated (°)']
     rise_original, twist_original, rise, twist = list(suboptimal_data.loc[suboptimal_data['emdb_id']==emdid_full, value_list].iloc[0])
 
     print(rise_original, twist_original, rise, twist)
 
-    #if os.path.exists(output_pd_path):
-    #    suboptimal_pd = pd.read_csv(output_pd_path, dtype='str')
-    #    if emdid_full in list(suboptimal_pd['emdb_id']):
-    #        print(f'{emdid_full} has been checked')
-    #        continue
+    if os.path.exists(output_pd_path):
+        suboptimal_pd = pd.read_csv(output_pd_path, dtype='str')
+        if emdid_full in list(suboptimal_pd['emdb_id']):
+            print(f'{emdid_full} has been checked')
+            continue
 
     try:
         map1, map2, apix1, apix2 = get_half_maps(emdid)

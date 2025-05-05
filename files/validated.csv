@@ -1,4 +1,4 @@
-emdb_id,group,resolution (??),rise_deposited (??),twist_deposited (??),csym_deposited,curated_rise (??),curated_twist (??),curated_csym,vector difference,axes order,cc_emdb,cc_curated,validated,update,reason,reason 1,reason 2
+emdb_id,group,resolution (??),rise_deposited (??),twist_deposited (??),csym_deposited,rise_curated (??),twist_curated (??),csym_curated,vector difference,axes order,cc_emdb,cc_curated,validated,update,reason,reason 1,reason 2
 EMD-61989,amyloid,3.6,2.4,179.59,C1,2.393332728834892,179.58595280412413,1,0.007065168,,0.9451170579671364,0.9584405945669499,Yes,equal,deposited,,
 EMD-47002,amyloid,3.2,4.83,-0.7,C1,4.823206079243351,-0.655766711,1,0.016434256321203215,,0.8862745359399231,0.8829192896462426,Yes,equal,deposited,,
 EMD-61988,amyloid,2.6,2.4,179.55,C1,2.3933331286452395,179.54726267300458,1,0.006834718,,0.9324384464263046,0.9279976294122219,Yes,equal,deposited,,

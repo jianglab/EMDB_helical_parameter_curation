@@ -15,9 +15,9 @@ print(helical_pd.columns)
 
 helical_pd = helical_pd.rename(columns={'resolution':'resolution (Å)','rise':'rise_deposited (Å)', 'twist':'twist_deposited (°)', 'csym': 'csym_deposited'})
 
-helical_pd = helical_pd.reindex(columns=['emdb_id','group','resolution (Å)','rise_deposited (Å)','twist_deposited (°)','csym_deposited','curated_rise (Å)','curated_twist (°)','curated_csym', 'vector difference','axes order','cc_emdb','cc_curated','validated','update','reason','reason 1','reason 2'])
+helical_pd = helical_pd.reindex(columns=['emdb_id','group','resolution (Å)','rise_deposited (Å)','twist_deposited (°)','csym_deposited','rise_curated (Å)','twist_curated (°)','csym_curated', 'vector difference','axes order','cc_emdb','cc_curated','validated','update','reason','reason 1','reason 2'])
 
-# curated_rise (Å),curated_twist (°),curated_csym,axes order,cc_emdb,cc_curated,validated,update,reason
+# rise_curated (Å),twist_curated (°),csym_curated,axes order,cc_emdb,cc_curated,validated,update,reason
 
 ## add hi3d link
 #link = 'https://helical-indexing-hi3d.streamlit.app/?emd_id=emd'

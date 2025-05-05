@@ -34,7 +34,7 @@ for i in range(len(emdb_list)):
             continue
     
 
-    value_list = ['rise_deposited (Å)', 'twist_deposited (°)','csym_deposited','curated_rise (Å)', 'curated_twist (°)']
+    value_list = ['rise_deposited (Å)', 'twist_deposited (°)','csym_deposited','curated_rise (Å)', 'twist_curated (°)']
 
     rise_original, twist_original,csym_original, rise, twist = list(data_pd.loc[data_pd['emdb_id']==emdid_full, value_list].iloc[0])
     values = rise_original, twist_original, rise, twist

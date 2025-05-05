@@ -8,7 +8,7 @@ from compute.symmetrization import apply_helical_symmetry, apply_helical_symmetr
 data_path = './EMDB_validation.csv'
 
 data_pd = pd.read_csv(data_path, dtype='str')
-emdb_list = ['43868', '0614','41844','43829','51003','38733','40197','27090']
+emdb_list = ['28063']
 #emdb_list = ['43868']
 
 save_path = '/net/jiang/scratch/li3221/curation/sym_map'
@@ -22,7 +22,7 @@ for i in range(len(emdb_list)):
     emdid = emdb_list[i]
     emdid_full = 'EMD-'+emdid
 
-    value_list = ['rise_deposited (Å)', 'twist_deposited (°)','curated_rise (Å)', 'curated_twist (°)']
+    value_list = ['rise_deposited (Å)', 'twist_deposited (°)','rise_curated (Å)', 'twist_curated (°)']
     rise_original, twist_original, rise, twist = list(data_pd.loc[data_pd['emdb_id']==emdid_full, value_list].iloc[0].astype(np.float32))
 
     print(emdid_full, rise_original, twist_original, rise, twist)

@@ -42,8 +42,8 @@ for i in range(len(emdb_list)):
 
     # check this emdb path has been checked or not
 
-    list_header = ['group','curated_rise (Å)','curated_twist (°)',
-                   'curated_csym', 'vector difference','axes order',
+    list_header = ['group','rise_curated (Å)','twist_curated (°)',
+                   'csym_curated', 'vector difference','axes order',
                    'cc_emdb','cc_curated','validated','update']
 
     emdid_full = 'EMD-'+str(emdid)
