@@ -1,4 +1,4 @@
-# EMDB_helical_parameter_curation
+# Validation of the helical parameter of the helical assembly entries in the EMDB
 
 This repository contains the curated value of the helical parameter in the EMDB and the code of automatic curation. 
 
