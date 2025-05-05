@@ -3,7 +3,7 @@ import pandas as pd
 import os
 
 output_pd_path = './EMDB_validation.csv'
-output_pd_path_1 = './EMDB_validation_hi3d.csv'
+output_pd_path_1 = './EMDB_validation_hi3d.xlsx'
 
 df = pd.read_csv(output_pd_path)
 print(df.columns)
@@ -14,4 +14,5 @@ df['HI3D_link'] = 'https://helical-indexing-hi3d.streamlit.app/?emd_id=emd-' + d
     + '&rise=' + df['rise_deposited (Å)'].astype(str) + '&twist=' + df['twist_deposited (°)'].astype(str) + '&csym=' + df['csym_deposited'].str[1:]\
         + '&rise2=' + df['rise_validated (Å)'].astype(str) + '&twist2=' + df['twist_validated (°)'].astype(str) + '&csym2=' + df['csym_validated'].str[1:]
 
-df.to_csv(output_pd_path_1,index=False)
+#df.to_csv(output_pd_path_1,index=False)
+df.to_excel(output_pd_path_1, index=False)  
