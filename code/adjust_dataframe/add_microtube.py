@@ -4,7 +4,7 @@ import os
 
 
 output_pd_path = './EMDB_validation.csv'
-suboptimal_pd_path = './files/suboptimal_2.csv'
+suboptimal_pd_path = './files/suboptimal_cylinder.csv'
 
 df_data = pd.read_csv(output_pd_path)
 df_suboptimal = pd.read_csv(suboptimal_pd_path)

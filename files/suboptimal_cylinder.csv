@@ -9,7 +9,7 @@ EMD-33934,4.06,3.57,amyloid
 EMD-27085,3.3,3.08,amyloid
 EMD-28932,2.38,2.38,non-amyloid
 EMD-17056,3.6,3.53,non-amyloid
-EMD-15118,3.85,3.66,non-amyloid
+EMD-15118,3.85,3.66,microtubule
 EMD-32033,4.2,3.9,microtubule
 EMD-15119,4.05,3.64,microtubule
 EMD-15120,4.3,3.78,microtubule
@@ -24,8 +24,8 @@ EMD-34879,9.23,8.17,non-amyloid
 EMD-41844,3.17,2.92,non-amyloid
 EMD-46909,3.4,3.29,amyloid
 EMD-46904,2.61,2.57,amyloid
-EMD-43868,4.54,3.61,microtubule
-EMD-43829,3.98,3.52,microtubule
+EMD-43868,4.54,3.61,non-amyloid
+EMD-43829,3.98,3.52,non-amyloid
 EMD-42294,3.25,3.25,amyloid
 EMD-38108,2.77,2.73,amyloid
 EMD-35972,2.55,2.55,amyloid
