@@ -5,7 +5,7 @@ import mrcfile
 from compute.download import get_correct_data_url
 from compute.symmetrization import apply_helical_symmetry, apply_helical_symmetry_cg, apply_helical_symmetry_cg_gpu, apply_helical_symmetry_ds
 
-data_path = './EMDB_validation.csv'
+data_path = './files/EMDB_validation.csv'
 
 data_pd = pd.read_csv(data_path, dtype='str')
 emdb_list = ['28063']

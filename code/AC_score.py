@@ -7,7 +7,7 @@ from compute.symmetrization import sym_cross_correlation
 
 
 #data_path = './files/need_curation.csv'
-data_path = './EMDB_validation.csv'
+data_path = './files/EMDB_validation.csv'
 
 data_pd = pd.read_csv(data_path, dtype='str')
 

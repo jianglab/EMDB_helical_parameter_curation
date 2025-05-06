@@ -7,7 +7,7 @@ from compute.download import get_correct_data_url, get_emdb_parameters, is_amylo
 from compute.calculate_radius import rmin_max_estimateion, vector_diff
 
 
-data_path = './EMDB_validation.csv'
+data_path = './files/EMDB_validation.csv'
 data_path_save = './EMDB_validation_vector_diff.csv'
 
 data_pd = pd.read_csv(data_path, dtype='str')

@@ -23,7 +23,7 @@ helical_pd = helical_pd.reindex(columns=['emdb_id','group','resolution (Å)','ri
 #link = 'https://helical-indexing-hi3d.streamlit.app/?emd_id=emd'
 #helical_pd['HI3D_link'] = link+helical_pd['emdb_id'].str[3:]
 
-data_path = './EMDB_validation.csv'
+data_path = './files/EMDB_validation.csv'
 validated_pd = pd.read_csv(data_path)
 non_validated_pd = helical_pd[~helical_pd['emdb_id'].isin(validated_pd['emdb_id'])]
 

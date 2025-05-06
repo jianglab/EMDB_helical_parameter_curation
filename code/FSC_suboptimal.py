@@ -133,7 +133,7 @@ def fsc_calculation(map1, map2, rise, twist, apix, n_rise=3, mask_path = None, t
     
     return resolution
 
-data_path = './EMDB_validation.csv'
+data_path = './files/EMDB_validation.csv'
 output_pd_path = './files/suboptimal_2.csv'
 use_trueFSC = True
 data_pd = pd.read_csv(data_path, index_col=False)
